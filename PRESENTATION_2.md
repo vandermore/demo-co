@@ -122,8 +122,7 @@ nx g @twittwer/compodoc:config <project-name>
 
 ```
 
-
-Configure storybook-watch & storybook-build targets in angular.json:
+Configure new commands targets in `angular.json` file to :
 
 ```json
 {
@@ -172,12 +171,52 @@ export default {
   // Connects the story to the generated docs
   component: TextComponent
 }
-
 ```
 
-### 3) Setup some stories
+Now we can add some comments to the properties of the `TextComponent` code and it will be reflected in our Storybook docs.
 
-We'll start by adding some actions. Actions allow us to hook into the methods of our component, we'll use them to check the values emitted by our outputs. We'll make it easy to reuse them by creating an object of our actions
+```ts
+export class TextComponent implements OnInit {
+  /**
+   * Controls background color of control
+   */
+  @Input() @HostBinding('style.background') backgroundColor = `#D0B0DA`;
+  /**
+   * Controls interactive state of control
+   */
+  @Input() state: EditableState = 'editing';
+  ...
+}
+```
+
+### 06-enhance-controls
+
+We have controls working, but let's refine them so they behave as expected and give our users a better idea of what are appropriate values. To do this we simply update the `default` export in `text.component.stories.ts` like so:
+
+```ts
+export default {
+  // The title in sidenav for our group of stories for this component
+  title: 'Editable Text Component',
+  // Connects the story to the generated docs
+  component: TextComponent,
+  // Refine Storybook controls here
+  argTypes: {
+    // use color picker to control backgroundColor input
+    backgroundColor: { control: 'color'},
+    // use select to control state input
+    state: {
+      control: {
+        type: 'select',
+        options: ['displaying', 'editing', 'updating']
+      }
+    }
+  }
+}
+```
+
+### 07-use-storybook-actions-to-monitor-outputs
+
+Now let's add some actions. Actions allow us to hook into any of the component's and, Here we'll use them to check the values emitted by our outputs. We'll make it easy to reuse them by creating an object of our actions in `text.component.ts`.
 
 ```ts
 const actionsData = {
@@ -187,13 +226,14 @@ const actionsData = {
 };
 ```
 
-We'll tell Storybook not to try and render these actions by adding the `excludeStories` property to the default export
+Then we'll tell Storybook not to try and render these actions by adding the `excludeStories` property to the default export
 
 ```ts
 export default {
   title: 'TextComponent',
   component: TextComponent,
-  excludeStories: /.*Data$/, // Tells storybook to not render anything that ends with `Data`
+  // Tells storybook to not render anything that ends with `Data`
+  excludeStories: /.*Data$/,
 }
 ```
 
