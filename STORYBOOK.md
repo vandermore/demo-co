@@ -64,7 +64,7 @@ We'll go through setup and then implement some of Storybook's useful features. T
 Add the Storybook plugin and addons to dev dependencies
 
 ```bash
-npm i -D @nrwl/storybook @storybook/essentials
+npm i -D @nrwl/storybook @storybook/addon-essentials
 ```
 
 Run Nx storybook schematic
