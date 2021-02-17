@@ -56,8 +56,11 @@ The most common method of developing/testing/showcasing/documenting components i
 
 ## Walkthrough
 
-We'll go through setup and then implement some of Storybook's useful features. The heading of each step corresponds to a branch on the
+We'll go through setup and then implement some of Storybook's useful features. The heading of each step corresponds to a branch name in the repo with all the changes for that step.
 
+### 00-editable-library
+
+We are going to be working with a component library called `editable`. It's designed to facilitate inline editing of documents, similar to updating a single field in a JIRA ticket. Right now there is only a single component, but we'll add Storybook now. We want to make sure we are documenting these components as we build them to help ensure adoption in our organization.
 
 ### 01-installs-storybook
 
@@ -223,6 +226,15 @@ Configure new commands targets in `angular.json` file to :
     }
   }
 }
+```
+
+Tell Storybook where to find the generated docs JSON in `.storybook/preview.js` file.
+
+```js
+import { setCompodocJson } from '@storybook/addon-docs/angular';
+import compodocJson from '../../../dist/compodoc/editable/documentation.json';
+
+setCompodocJson(compodocJson);
 ```
 
 And the last step is in the `text.component.stories.ts` file. We just need to assign a story to the default export.
